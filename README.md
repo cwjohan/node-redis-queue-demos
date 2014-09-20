@@ -25,7 +25,7 @@ Note that, when running worker01, one optionally may use a 'mem' parameter to mo
 
 ##Running Coffee
 
-If you make any changes to the source code, you will want to
+If you make any changes to the .coffee source code, you will want to
 convert the .coffee files into .js files. To do so, run:
 ```
 npm run-script coffee
