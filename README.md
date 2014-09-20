@@ -3,12 +3,12 @@ node-redis-queue-demos
 
 Examples of how to use node-redis-queue.
 
-##Instructions
+##Install the source code
 
 1. Run `git clone https://github.com/cwjohan/node-redis-queue-demos.git` to get a copy of the source code.
 2. Run `npm install` to get the dependencies.
 
-##Running the demo 01 code
+##Run the demo 01 code
 
 1. Open two Git Bash console windows.
 2. In one of the console windows, run `redis-server &` to start the Redis server in the background.
@@ -22,3 +22,11 @@ Examples of how to use node-redis-queue.
 Note that, when running worker01, one optionally may use a 'mem' parameter to monitor memory usage. For example:
 
 `node worker01.js mem | grep '>>>' | tee memusage.out`
+
+##Running Coffee
+
+If you make any changes to the source code, you will want to
+convert the .coffee files into .js files. To do so, run:
+```
+npm run-script coffee
+```
