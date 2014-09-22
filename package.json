@@ -1,10 +1,10 @@
 {
   "name": "node-redis-queue-demos",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Examples of how to use node-redis-queue.",
   "main": "index.js",
   "dependencies": {
-    "node-redis-queue": "~0.0.2",
+    "node-redis-queue": "~0.0.3",
     "redis": "^0.12.1",
     "request": "^2.44.0"
   },

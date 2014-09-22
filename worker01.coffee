@@ -10,13 +10,6 @@ redisQueueTimeout = 1
 redisClient = null
 myQueue = null
 
-if process.argv[2] is 'mem'
-  memwatch = require 'memwatch'
-  memwatch.on 'stats', (d) ->
-    console.log '>>>current = ' + d.current_base + ', max = ' + d.max
-  memwatch.on 'leak', (d) ->
-    console.log '>>>LEAK = ', d
-
 redisClient = redis.createClient redisPort, redisHost
 myQueue = new RedisQueue redisClient, redisQueueTimeout
 
