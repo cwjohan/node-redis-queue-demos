@@ -34,7 +34,7 @@ in the background.
 4. In the third console window, run `node provider02.js 01 clear`, which will clear the URL and result queues and
 place four items in the URL queue. Shortly thereafter, the worker02 process will pick up the four items, display them,
 compute an SHA1 value for each one and return it and the SHA1 value in the result queue to be consumed by provider02.
-5. Repeat `node provider02 01' a few times.
+5. Repeat `node provider02 01` a few times.
 6. In the third console window, run `node provider02.js stop`, which will put a stop command in the URL queue. Shortly
    thereafter, the worker01 process will stop.
 
