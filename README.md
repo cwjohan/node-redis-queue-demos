@@ -35,13 +35,13 @@ in the background.
 place four items in the URL queue. Shortly thereafter, the worker02 process will pick up the four items, display them,
 compute an SHA1 value for each one and return it and the SHA1 value in the result queue to be consumed by provider02.
 5. Repeat `node provider02 01' a few times.
-6. In the third console window, run `node provider01.js stop`, which will put a stop command in the URL queue. Shortly
+6. In the third console window, run `node provider02.js stop`, which will put a stop command in the URL queue. Shortly
    thereafter, the worker01 process will stop.
 
 Note that, when running worker02, one optionally may use a 'mem' and verbose parameters to monitor memory usage.
 For example:
 
-`node worker01.js mem verbose | grep '>>>' | tee memusage.out`
+`node worker02.js mem verbose | grep '>>>' | tee memusage.out`
 
 ##Run the demo 03 and demo 04 code
 
