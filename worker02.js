@@ -3,22 +3,23 @@
   'use strict';
 
   /*
-  QueueMgr Example -- worker01
+  QueueMgr Example -- woker02
   
-  This app waits for URLs to become available in the 'urlq' queue, as provided
-  by worker01. Then, for each one it receives, the app gets the page for the URL,
-  computes an SHA1 value, and outputs it to the console log.
-  However, if it receives a '***stop***' message, it closes the connection and
-  quits immediately.
+  This app waits for work requests to become available in the 'urlq' queue.
+  Then, for each one it receives, the app get the page for the URL, computes an
+  SHA1 value on the request URL (req.url) and outputs that and the request URL
+  value (req.url) to the result queue (req.q) specified in the work request.
+  However, if it receives a '***stop***' message, it closes the connection
+  and quits immediately.
   
   Usage:
     cd demo/lib
     export NODE_PATH='../../..'
-    node worker01.js
-  or
-    node worker01.js mem verbose
+    node worker02.js
+   or
+    node worker02.js mem verbose
   
-  Use this app in conjunction with provider01.js. See the provider01 source code
+  Use this app in conjunction with provider02.js. See the provider02 source code
   for more details.
    */
   var QueueMgr, SHA1, checkArgs, initEventHandlers, onData, qmgr, request, shutDown, urlQueueName, verbose;
@@ -31,8 +32,6 @@
 
   urlQueueName = 'urlq';
 
-  qmgr = null;
-
   verbose = process.argv[3] === 'verbose';
 
   qmgr = new QueueMgr;
@@ -41,7 +40,7 @@
     checkArgs();
     initEventHandlers();
     qmgr.pop(urlQueueName, onData);
-    return console.log('Waiting for data...');
+    return console.log('waiting for work...');
   });
 
   checkArgs = function() {
@@ -68,26 +67,36 @@
     });
   };
 
-  onData = function(url) {
-    console.log('message url = ' + url);
-    if (typeof url === 'string') {
-      if (url === '***stop***') {
-        console.log('worker01 stopping');
-        shutDown();
-      }
-      console.log('worker01 processing URL "' + url + '"');
-      return request(url, function(error, response, body) {
+  onData = function(req) {
+    if (typeof req === 'object') {
+      console.log('worker01 processing request ', req);
+      return request(req.url, function(error, response, body) {
         var sha1;
         if (!error && response.statusCode === 200) {
           sha1 = SHA1(body);
-          console.log(url + ' SHA1 = ' + sha1);
-          qmgr.pop(urlQueueName, onData);
+          console.log(req.url + ' SHA1 = ' + sha1);
+          qmgr.push(req.q, {
+            url: req.url,
+            sha1: sha1
+          });
         } else {
           console.log(error);
+          qmgr.push(req.q, {
+            url: req.url,
+            err: error,
+            code: response.statusCode
+          });
         }
+        return qmgr.pop(urlQueueName, onData);
       });
     } else {
-      return console.log('Unexpected message: ', url);
+      if (typeof req === 'string' && req === '***stop***') {
+        console.log('worker02 stopping');
+        shutDown();
+      }
+      console.log('Unexpected message: ', req);
+      console.log('Type of message = ' + typeof req);
+      return shutDown();
     }
   };
 
