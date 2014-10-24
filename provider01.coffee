@@ -7,7 +7,6 @@ for consumption by worker01. When done with that, it quits.
 
 Usage:
   cd demo/lib
-  export NODE_PATH='../../..'
   node provider01.js clear
   node provider01.js
   ...

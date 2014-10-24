@@ -16,7 +16,6 @@
   
   Usage:
      cd demo/lib
-     export NODE_PATH='../../..'
      node worker04.js
    or
      node worker04.js mem verbose

@@ -13,7 +13,6 @@
   
   Usage:
     cd demo/lib
-    export NODE_PATH='../../..'
     node worker01.js
   or
     node worker01.js mem verbose

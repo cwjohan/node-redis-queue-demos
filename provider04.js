@@ -11,7 +11,6 @@
   
   Usage:
       cd demo/lib
-      export NODE_PATH='../../..'
       node provider04.js <providerId> [clear]
     or
       node provider04.js stop
@@ -21,7 +20,6 @@
   
   Example usage:
     cd demo/lib
-    export NODE_PATH='../../..'
     node provider04.js 01 clear
     node provider04.js
     node provider04.js

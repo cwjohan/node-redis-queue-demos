@@ -8,7 +8,6 @@ or whatever, depending on the providerId parameter.
 
 Usage:
    cd demo/lib
-   export NODE_PATH='../../..'
    node provider02.js <providerId> [clear]
  or
    node provider02.js stop
@@ -18,7 +17,6 @@ Usage:
 
 Example usage:
   cd demo/lib
-  export NODE_PATH='../../..'
   node provider02.js 01 clear
   node provider02.js
   node provider02.js

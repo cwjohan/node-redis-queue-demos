@@ -8,7 +8,6 @@ next message will become available. Each work queue operates independently.
 
 Usage:
   cd demo/lib
-  export NODE_PATH='../../..'
   node worker03.js
 
 Use this program in conjunction with provider03. See provider03 source code
@@ -46,14 +45,14 @@ consumeData = ->
   console.log 'consuming queue "work-queue-1"'
   myWorkQueue1.consume (payload, ack) ->
     console.log 'received message "' + payload + '" in queue "work-queue-1"'
-    shutDown() if payload is '***stop***' and --queuesActive is 0
-    ack()
+    ack payload is '***stop***'
+    myBroker.end() if payload is '***stop***' and --queuesActive is 0
 
   console.log 'consuming queue "work-queue-2"'
   myWorkQueue2.consume (payload, ack) ->
     console.log 'received message "' + payload + '" in queue "work-queue-2"'
-    shutDown() if payload is '***stop***' and --queuesActive is 0
-    ack()
+    ack payload is '***stop***'
+    myBroker.end() if payload is '***stop***' and --queuesActive is 0
 
 shutDown = ->
   myBroker.end()
