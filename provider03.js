@@ -11,16 +11,16 @@
   
   Usage:
     cd demo/lib
-    export NODE_PATH='../../..'
     node provider01.js clear
     node provider01.js
+    node provider01.js 10
     ...
     node provider01.js stop
   
   Use this app in conjunction with worker03.js. See the worker03 source code
   for more details.
    */
-  var WorkQueueBroker, clear, clearWorkQueues, createWorkQueues, expectedItemsQ1, expectedItemsQ2, initEventHandlers, itemCntQ1, itemCntQ2, myBroker, myWorkQueue1, myWorkQueue2, sendData, sendStop, shutDown, stop;
+  var WorkQueueBroker, clear, clearWorkQueues, createWorkQueues, expectedItemsQ1, expectedItemsQ2, initEventHandlers, itemCntQ1, itemCntQ2, myBroker, myWorkQueue1, myWorkQueue2, sendData, sendStop, shutDown, stop, timesToRepeat;
 
   myWorkQueue1 = null;
 
@@ -40,6 +40,8 @@
 
   stop = process.argv[2] === 'stop';
 
+  timesToRepeat = parseInt(process.argv[2]) || 1;
+
   WorkQueueBroker = require('node-redis-queue').WorkQueueBroker;
 
   myBroker = new WorkQueueBroker();
@@ -50,11 +52,9 @@
     createWorkQueues();
     if (stop) {
       sendStop();
-      shutDown();
-    }
-    if (clear) {
+      return shutDown();
+    } else if (clear) {
       return clearWorkQueues(function() {
-        sendData();
         return shutDown();
       });
     } else {
@@ -97,17 +97,24 @@
   };
 
   sendData = function() {
-    var item, _i, _j, _len, _len1, _results;
-    for (_i = 0, _len = expectedItemsQ1.length; _i < _len; _i++) {
-      item = expectedItemsQ1[_i];
-      console.log('publishing "' + item + '" to queue "work-queue-1"');
-      myWorkQueue1.send(item);
-    }
+    var item, _i, _len, _results;
     _results = [];
-    for (_j = 0, _len1 = expectedItemsQ2.length; _j < _len1; _j++) {
-      item = expectedItemsQ2[_j];
-      console.log('publishing "' + item + '" to queue "work-queue-2"');
-      _results.push(myWorkQueue2.send(item));
+    while (timesToRepeat--) {
+      for (_i = 0, _len = expectedItemsQ1.length; _i < _len; _i++) {
+        item = expectedItemsQ1[_i];
+        console.log('publishing "' + item + '" to queue "work-queue-1"');
+        myWorkQueue1.send(item);
+      }
+      _results.push((function() {
+        var _j, _len1, _results1;
+        _results1 = [];
+        for (_j = 0, _len1 = expectedItemsQ2.length; _j < _len1; _j++) {
+          item = expectedItemsQ2[_j];
+          console.log('publishing "' + item + '" to queue "work-queue-2"');
+          _results1.push(myWorkQueue2.send(item));
+        }
+        return _results1;
+      })());
     }
     return _results;
   };
@@ -119,8 +126,7 @@
   };
 
   shutDown = function() {
-    myBroker.end();
-    return process.exit();
+    return myBroker.shutdownSoon();
   };
 
 }).call(this);

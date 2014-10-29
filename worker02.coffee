@@ -12,8 +12,6 @@ and quits immediately.
 Usage:
   cd demo/lib
   node worker02.js
- or
-  node worker02.js mem verbose
 
 Use this app in conjunction with provider02.js. See the provider02 source code
 for more details.
@@ -22,22 +20,12 @@ QueueMgr = require('node-redis-queue').QueueMgr
 request = require 'request'
 SHA1 = require('./lib/helpers/tinySHA1.r4.js').SHA1
 urlQueueName = 'urlq'
-verbose = process.argv[3] is 'verbose'
 
 qmgr = new QueueMgr
 qmgr.connect ->
-  checkArgs()
   initEventHandlers()
   qmgr.pop urlQueueName, onData
   console.log 'waiting for work...'
-
-checkArgs = ->
-  if process.argv[2] is 'mem'
-    memwatch = require 'memwatch'
-    memwatch.on 'stats', (d) ->
-      console.log '>>>current = ' + d.current_base + ', max = ' + d.max
-    memwatch.on 'leak', (d) ->
-      console.log '>>>LEAK = ', d
 
 initEventHandlers = ->
   qmgr.on 'end', () ->

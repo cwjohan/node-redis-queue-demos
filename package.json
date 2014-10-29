@@ -1,10 +1,9 @@
 {
   "name": "node-redis-queue-demos",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Examples of how to use node-redis-queue.",
   "dependencies": {
-    "node-redis-queue": "~0.1.7",
-    "redis": "^0.12.1",
+    "node-redis-queue": "~0.1.11",
     "request": "^2.44.0"
   },
   "devDependencies": {
@@ -19,7 +18,9 @@
     "url": "https://github.com/cwjohan/node-redis-queue-demos.git"
   },
   "keywords": [
+    "queue",
     "queueing",
+    "work",
     "redis",
     "demo",
     "example"

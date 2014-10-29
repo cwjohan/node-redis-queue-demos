@@ -10,6 +10,9 @@ Usage:
   cd demo/lib
   node worker03.js
 
+ or, to monitor for memory leaks
+  node worker03.js mem | grep '>>>'
+
 Use this program in conjunction with provider03. See provider03 source code
 for more details.
 ###
@@ -23,10 +26,20 @@ WorkQueueBroker = require('node-redis-queue').WorkQueueBroker
 myBroker = new WorkQueueBroker()
 myBroker.connect () ->
   console.log 'work queue broker ready'
+  checkArgs()
   initEventHandlers()
   createWorkQueues()
   consumeData()
   console.log 'waiting for data...'
+
+checkArgs = ->
+  if process.argv[2] is 'mem'
+    console.log 'monitoring for memory leaks'
+    memwatch = require 'memwatch'
+    memwatch.on 'stats', (d) ->
+      console.log '>>>current = ' + d.current_base + ', max = ' + d.max
+    memwatch.on 'leak', (d) ->
+      console.log '>>>LEAK = ', d
 
 initEventHandlers = ->
   myBroker.on 'error', (error) ->
