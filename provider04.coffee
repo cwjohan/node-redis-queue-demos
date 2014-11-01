@@ -40,8 +40,8 @@ stopWorker = process.argv[2] is 'stop'
 urls = [
   'http://www.google.com',
   'http://www.yahoo.com',
-  'http://ourfamilystory.com',
-  'http://ourfamilystory.com/pnuke'
+  'http://www.google.com/robots.txt',
+  'https://code.google.com'
 ]
 resultsExpected = 0
 
@@ -70,6 +70,7 @@ initEventHandlers = ->
 createWorkQueues = ->
   urlQueue = myBroker.createQueue urlQueueName
   resultQueue = myBroker.createQueue resultQueueName
+  return
 
 clearQueues = ->
   urlQueue.clear ->

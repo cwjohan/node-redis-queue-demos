@@ -29,7 +29,7 @@
 
   urlQueueName = 'urlq';
 
-  qmgr = new QueueMgr;
+  qmgr = new QueueMgr();
 
   qmgr.connect(function() {
     initEventHandlers();

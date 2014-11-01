@@ -42,6 +42,7 @@ initEventHandlers = ->
 
 createUrlQueue = ->
   urlQueue = myBroker.createQueue urlQueueName
+  return
 
 consumeUrlQueue = ->
   urlQueue.consume (req, ack) ->
