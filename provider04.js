@@ -3,7 +3,7 @@
   'use strict';
 
   /*
-  WorkQueueBroker Example -- provider04
+  WorkQueueMgr Example -- provider04
   
   For each URL in the urls list, this app puts a work request in 'urlq' queue to be
   consumed by worker04. It then waits for the results to be returned in 'urlshaq01'
@@ -28,9 +28,9 @@
   Use this app in conjunction with worker02.js. See the worker02 source code
   for more details.
    */
-  var WorkQueueBroker, clearInitially, clearQueues, consumeResultQueue, createWorkQueues, initEventHandlers, myBroker, providerId, resultQueue, resultQueueName, resultQueueTimeout, resultsExpected, sendURLs, stopOneWorker, stopWorker, urlQueue, urlQueueName, urls;
+  var WorkQueueMgr, clearInitially, clearQueues, consumeResultQueue, createWorkQueues, initEventHandlers, mgr, providerId, resultQueue, resultQueueName, resultQueueTimeout, resultsExpected, sendURLs, stopOneWorker, stopWorker, urlQueue, urlQueueName, urls;
 
-  WorkQueueBroker = require('node-redis-queue').WorkQueueBroker;
+  WorkQueueMgr = require('node-redis-queue').WorkQueueMgr;
 
   urlQueueName = 'urlq';
 
@@ -57,9 +57,9 @@
 
   resultsExpected = 0;
 
-  myBroker = new WorkQueueBroker();
+  mgr = new WorkQueueMgr();
 
-  myBroker.connect(function() {
+  mgr.connect(function() {
     console.log('connected');
     initEventHandlers();
     createWorkQueues();
@@ -74,19 +74,19 @@
   });
 
   initEventHandlers = function() {
-    myBroker.on('end', function() {
+    mgr.on('end', function() {
       console.log('provider04 finished');
       return process.exit();
     });
-    return myBroker.on('error', function(error) {
+    return mgr.on('error', function(error) {
       console.log('provider01 stopping due to: ' + error);
       return process.exit();
     });
   };
 
   createWorkQueues = function() {
-    urlQueue = myBroker.createQueue(urlQueueName);
-    resultQueue = myBroker.createQueue(resultQueueName);
+    urlQueue = mgr.createQueue(urlQueueName);
+    resultQueue = mgr.createQueue(resultQueueName);
   };
 
   clearQueues = function() {
@@ -94,7 +94,7 @@
       console.log('cleared "' + urlQueueName + '"');
       return resultQueue.clear(function() {
         console.log('cleared "' + resultQueueName + '"');
-        return myBroker.disconnect();
+        return mgr.disconnect();
       });
     });
   };
@@ -120,7 +120,7 @@
       console.log('result = ', result);
       ack();
       if (!--resultsExpected) {
-        return myBroker.end();
+        return mgr.end();
       }
     });
   };
@@ -128,7 +128,7 @@
   stopOneWorker = function() {
     console.log('Stopping worker');
     urlQueue.send('***stop***');
-    return myBroker.disconnect();
+    return mgr.disconnect();
   };
 
 }).call(this);
