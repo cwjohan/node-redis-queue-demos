@@ -57,7 +57,7 @@ This demo is almost the same as demo 02 but uses WorkQueueMgr rather than Channe
 1. In the second console window, run `node provider04.js stop`, which will put a stop command in the queue. Shortly
    thereafter, the worker04 process will stop.
 
-Try the above again using node worker04 3 in step 1. Observe that the worker will process three input requests in parallel and that the results may become available in a different order than the input requests.
+Try the above again using `node worker04.js 3` in step 1. Observe that the worker will process three input requests in parallel and that the results may become available in a different order than the input requests.
 
 ##Running Coffee
 
