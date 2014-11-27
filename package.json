@@ -1,9 +1,9 @@
 {
   "name": "node-redis-queue-demos",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Examples of how to use node-redis-queue.",
   "dependencies": {
-    "node-redis-queue": "~0.2.1",
+    "node-redis-queue": "~0.2.3",
     "request": "^2.44.0"
   },
   "devDependencies": {

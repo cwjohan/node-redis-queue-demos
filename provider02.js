@@ -5,8 +5,8 @@
   /*
   Channel Example -- provider02
   
-  For each URL in the urls list, this app puts a work request in 'urlq' queue
-  consumed by worker02 and waits for the results to be returned in 'urlshaq01'
+  For each URL in the urls list, this app puts a work request in 'demo:urlq' queue
+  consumed by worker02 and waits for the results to be returned in 'demo:urlshaq01'
   or whatever, depending on the providerId parameter.
   
   Usage:
@@ -32,7 +32,7 @@
 
   Channel = require('node-redis-queue').Channel;
 
-  urlQueueName = 'urlq';
+  urlQueueName = 'demo:urlq';
 
   providerId = process.argv[2];
 
@@ -41,7 +41,7 @@
     process.exit();
   }
 
-  resultQueueName = 'urlshaq' + providerId;
+  resultQueueName = 'demo:urlshaq' + providerId;
 
   clearInitially = process.argv[3] === 'clear';
 
